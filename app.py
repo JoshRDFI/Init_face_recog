@@ -7,7 +7,7 @@ from PIL import Image
 import psycopg2
 import os
 
-# Get the directory of the current script
+# Get the directory of app.py
 script_dir = os.path.dirname(os.path.abspath(__file__))
 
 # Load/Store photos -- filenames go here
@@ -23,19 +23,16 @@ haar_cascade = cv2.CascadeClassifier(haar_cascade_path)
 # Read group image
 img = cv2.imread(group_photo, 0)
 # Create a black and white version of the image
-gray_img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
+# gray_img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
 # Detect the faces
-faces = haar_cascade.detectMultiScale(
-    gray_img, scaleFactor=1.05, minNeighbors=5, minSize=(100, 100)
-)
+faces = haar_cascade.detectMultiScale(img, scaleFactor=1.05, minNeighbors=5, minSize=(100, 100))
 
 # Loop through the detected faces
 i = 0
 for x, y, w, h in faces:
-    # crop the image to select only the face
+    # crop the image to select only the face and create file in 'stored-faces' directory
     cropped_image = img[y : y + h, x : x + w]
-    # loading the target image path into target_file_name variable 
-    target_file_name = 'stored-faces/' + str(i) + '.jpg'
+    target_file_name = os.path.join(stored_faces_dir, str(i) + '.jpg')
     cv2.imwrite(
         target_file_name,
         cropped_image,
@@ -72,24 +69,21 @@ conn.commit()
 
 
 # Open face image
-img = Image.open(face_file)
+find_img = Image.open(face_file)
 # Load the `imgbeddings`
 ibed = imgbeddings()
 # Calculate the embeddings
-embedding = ibed.to_embeddings(img)
+find_embedding = ibed.to_embeddings(find_img)
 
 # Find and display match
 face_image = cv2.imread(face_file)
 cur = conn.cursor()
-string_representation = "["+ ",".join(str(x) for x in embedding[0].tolist()) +"]"
+string_representation = "["+ ",".join(str(x) for x in find_embedding[0].tolist()) +"]"
 cur.execute("SELECT * FROM pictures ORDER BY embedding <-> %s LIMIT 1;", (string_representation,))
 rows = cur.fetchall()
 if rows:
-    # Assuming the first row contains the desired match
     matched_face_filename = rows[0][0]
-    # Construct the full path to the image file
-    matched_face_image_path = "stored-faces/" + matched_face_filename
-    # Load the image
+    matched_face_image_path = os.path.join(stored_faces_dir, matched_face_filename)
     matched_face_image = cv2.imread(matched_face_image_path)
     # Make sure both images are the same height before combining
     combined_image = cv2.hconcat([face_image, matched_face_image])
