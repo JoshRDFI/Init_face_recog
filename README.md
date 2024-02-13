@@ -12,14 +12,19 @@ Note: My system is running Ubuntu 22.0.4, with Python 3.10 installed. I used VS 
 
 Create the working directory and copy the notebook to it. 
 
-Download the face detection XML file: [https://github.com/kipr/opencv/blob/master/data/haarcascades/haarcascade_frontalface_default.xml](https://github.com/kipr/opencv/blob/master/data/haarcascades/haarcascade_frontalface_default.xml)
-Copy/Move this file to the directory where the notebook will run from. Next, create a subdirectory called 'stored-faces' 
+Download the face detection XML file from source: [https://github.com/kipr/opencv/blob/master/data/haarcascades/haarcascade_frontalface_default.xml](https://github.com/kipr/opencv/blob/master/data/haarcascades/haarcascade_frontalface_default.xml) or use the (unmodified) version I have in the repo. Copy/Move this file to the directory where the notebook will run from. Next, create a subdirectory called 'stored-faces' 
 
-Run: pip install opencv-python, imgbeddings, psycopg2-binary, dotenv 
+Run: 
+```
+pip install opencv-python, imgbeddings, psycopg2-binary, dotenv 
+```
 
 Install Postgresql (I am using version 14)
 
-Install postgres dev file (postgres.h is required): sudo apt install postgresql-server-dev-14
+Install postgres dev file (postgres.h is required): 
+```
+sudo apt install postgresql-server-dev-14
+```
 
 Install the vector extension found [HERE](https://github.com/pgvector/pgvector): (Instructions from pgvector)
   ```
