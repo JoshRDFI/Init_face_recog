@@ -85,7 +85,13 @@ if rows:
     matched_face_filename = rows[0][0]
     matched_face_image_path = os.path.join(stored_faces_dir, matched_face_filename)
     matched_face_image = cv2.imread(matched_face_image_path)
+    
     # Make sure both images are the same height before combining
+    if face_image.shape[0] != matched_face_image.shape[0]:
+        new_height = min(face_image.shape[0], matched_face_image.shape[0])
+        face_image = cv2.resize(face_image, (int(face_image.shape[1] * (new_height / face_image.shape[0])), new_height))
+        matched_face_image = cv2.resize(matched_face_image, (int(matched_face_image.shape[1] * (new_height / matched_face_image.shape[0])), new_height))
+
     combined_image = cv2.hconcat([face_image, matched_face_image])
     # Add identifying text
     cv2.putText(combined_image, "Face to Find", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
