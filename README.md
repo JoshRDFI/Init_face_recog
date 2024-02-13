@@ -3,7 +3,7 @@ My first foray into facial recognition
 
 This project is based off Matthew Berman's video (and Google Colab notebook) found here: [Youtube Video](https://www.youtube.com/watch?v=Y0dLgtF4IHM) and here: [Google Colab](https://colab.research.google.com/drive/19ulJqMQqk4PfcTx1v3C3cxjvzokrKgZS?usp=sharing)
 
-I have modified the notebook he provides to run locally using Juypter. To run the notebook, you'll need to follow the below instructions on your system. The images I use are From cast photos of Firefly, one of the top 5 sci-fi shows of all time. 
+I have modified the notebook he provides to run locally using Juypter. To run the notebook, you'll need to follow the below instructions on your system. The images I use are from cast photos of Firefly, one of the top 5 sci-fi shows of all time. 
 The images are included in the repo, but feel free to choose your own.
 
 ## System Setup / Requirements
