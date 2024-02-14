@@ -6,6 +6,8 @@ This project is based off Matthew Berman's video (and Google Colab notebook) fou
 I have modified the notebook he provides to run locally using Juypter. To run the notebook, you'll need to follow the below instructions on your system. The images I use are from cast photos of Firefly, one of the top 5 sci-fi shows of all time. 
 The images are included in the repo, but feel free to choose your own.
 
+Additionally, I created a standalone file (app.py) that runs through the same process and uses OpenCV to display the target and found images. 
+
 ## System Setup / Requirements
 
 Note: My system is running Ubuntu 22.0.4, with Python 3.10 installed. I used VS Code to edit/run the files on my system. The extensions I used to assist are PostgreSQL v7.0.4 and Jupyter v2024.1.1
@@ -53,4 +55,3 @@ DB_PASSWORD=YourDBPassword
 
 I believe that's everything. If you're using VS Code, you should be able to run each cell and have it output both the target image and the found image from the group photo.
 
-I am also working on making this run as a standalone python file (app.py in the repo) using OpenCV to display the target and found images. 
