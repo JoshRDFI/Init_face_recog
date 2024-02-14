@@ -6,6 +6,7 @@ from imgbeddings import imgbeddings
 from PIL import Image
 import psycopg2
 import os
+import numpy as np
 
 # Get the directory of app.py
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -85,17 +86,20 @@ if rows:
     matched_face_filename = rows[0][0]
     matched_face_image_path = os.path.join(stored_faces_dir, matched_face_filename)
     matched_face_image = cv2.imread(matched_face_image_path)
-    
+
     # Make sure both images are the same height before combining
     if face_image.shape[0] != matched_face_image.shape[0]:
         new_height = min(face_image.shape[0], matched_face_image.shape[0])
         face_image = cv2.resize(face_image, (int(face_image.shape[1] * (new_height / face_image.shape[0])), new_height))
         matched_face_image = cv2.resize(matched_face_image, (int(matched_face_image.shape[1] * (new_height / matched_face_image.shape[0])), new_height))
 
-    combined_image = cv2.hconcat([face_image, matched_face_image])
+    separator_width = 30
+    separator = np.zeros((face_image.shape[0], separator_width, 3), dtype=np.uint8)
+    combined_image = np.hstack((face_image, separator, matched_face_image))
+    # combined_image = cv2.hconcat([face_image, matched_face_image])
     # Add identifying text
-    cv2.putText(combined_image, "Face to Find", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
-    cv2.putText(combined_image, "Matched Face", (face_image.shape[1] + 10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
+    cv2.putText(combined_image, "Face to Find", (5, 20), cv2.FONT_HERSHEY_PLAIN, 1, (255, 255, 255), 2, cv2.LINE_AA)
+    cv2.putText(combined_image, "Matched Face", (face_image.shape[1] + 20, 20), cv2.FONT_HERSHEY_PLAIN, 1, (255, 255, 255), 2, cv2.LINE_AA)
 
     # Display the combined image
     cv2.imshow("Faces Comparison", combined_image)
@@ -104,4 +108,16 @@ if rows:
 else:
     print("No matching images found.")
 
+# Cleanup rows from the pictures table before closing the database connection
+cur.execute("DELETE FROM pictures;")
+conn.commit()
+
+# Clear the stored-faces directory
+for filename in os.listdir(stored_faces_dir):
+    file_path = os.path.join(stored_faces_dir, filename)
+    if os.path.isfile(file_path) or os.path.islink(file_path):
+            os.unlink(file_path)
+
+# Close the database connection
 cur.close()
+conn.close()
