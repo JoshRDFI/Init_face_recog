@@ -6,7 +6,6 @@ from imgbeddings import imgbeddings
 from PIL import Image
 import psycopg2
 import os
-import numpy as np
 
 # Get the directory of app.py
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -23,11 +22,8 @@ haar_cascade = cv2.CascadeClassifier(haar_cascade_path)
 
 # Read group image
 img = cv2.imread(group_photo, 0)
-# Create a black and white version of the image
-# gray_img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
 # Detect the faces
 faces = haar_cascade.detectMultiScale(img, scaleFactor=1.05, minNeighbors=5, minSize=(100, 100))
-
 # Loop through the detected faces
 i = 0
 for x, y, w, h in faces:
